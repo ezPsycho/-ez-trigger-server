@@ -1,0 +1,12 @@
+{
+  "name": "@ez-trigger/server",
+  "version": "0.0.1",
+  "main": "src/shell.js",
+  "module": "src/index.js",
+  "author": "Losses Don",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.3.1",
+    "esm": "^3.0.72"
+  }
+}
