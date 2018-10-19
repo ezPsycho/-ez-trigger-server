@@ -1,6 +1,6 @@
 import { hrtime } from 'process';
 
-import Repeat from './src/Repeat';
+import Repeat from '../src/Repeat';
 
 let startTime;
 
