@@ -43,3 +43,5 @@ class Program {
     this.server.send(message, id);
   }
 }
+
+export default Program;
