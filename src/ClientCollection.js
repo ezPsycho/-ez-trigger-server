@@ -90,9 +90,11 @@ class ClientCollection {
   }
 
   _broadcastToSet(message, set) {
-    this.collection[set].map(client => {
-      client.send(message);
-    });
+    if (this.hasSet(set)) {
+      this.collection[set].map(client => {
+        client.send(message);
+      });
+    }
   }
 
   _broadcastToAll(message) {
@@ -112,9 +114,9 @@ class ClientCollection {
 
     if (set !== '*') {
       if (Array.isArray(set)) {
-        set.map(s => this._broadcast(message, s));
+        set.map(s => this._broadcastToSet(message, s));
       } else {
-        this._broadcast(message, set);
+        this._broadcastToSet(message, set);
       }
     } else {
       this._broadcastToAll(message);
