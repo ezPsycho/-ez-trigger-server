@@ -5,14 +5,6 @@ class ClientCollection {
     this.arraySet = arraySet;
   }
 
-  getSetNames() {
-    return Object.keys(this.collection);
-  }
-
-  hasSet(name) {
-    return Object.keys(this.collection).includes(name);
-  }
-
   registerClient(client, set) {
     if (this.arraySet) {
       if (!this.collection[set]) {
@@ -29,17 +21,87 @@ class ClientCollection {
     }
   }
 
-  deregisterClient(client, set) {
+  deregisterClient(arg1, arg2) {
     if (this.arraySet) {
+      const client = arguments[0];
+      const set = arguments[1];
+
       if (this.collection[set] && this.collection[set].includes(client)) {
         const index = client.indexOf(client);
 
         this.collection[set].splice(index, 1);
       }
     } else {
+      const set = arguments[0];
+
       if (Object.keys(this.collection).includes(set)) {
         delete this.collection[set];
       }
+    }
+  }
+
+  map(fn) {
+    return Object.entries(this.collection).map((set, client) => {
+      return fn(set, client);
+    });
+  }
+
+  forEach(fn) {
+    return Object.entries(this.collection).forEach((set, client) => {
+      return fn(set, client);
+    });
+  }
+
+  querySetName(client) {
+    let result;
+
+    result = [];
+
+    if (this.arraySet) {
+      Object.entries(this.collection).map(entry => {
+        if (entry[1].includes(client)) {
+          result.push(entry[0]);
+        }
+      });
+    } else {
+      Object.entries(this.collection).map(entry => {
+        if (entry[1] === client) {
+          result.push(entry[0]);
+        }
+      });
+    }
+
+    return result;
+  }
+
+  hasSet(name) {
+    return Object.keys(this.collection).includes(name);
+  }
+
+  getNames() {
+    return Object.keys(this.collection);
+  }
+  getClients() {
+    return Object.values(this.collection);
+  }
+
+  getSet(set) {
+    return this.collection[set];
+  }
+
+  _broadcastToSet(message, set) {
+    this.collection[set].map(client => {
+      client.send(message);
+    });
+  }
+
+  _broadcastToAll(message) {
+    if (this.arraySet) {
+      this.forEach((set, clients) =>
+        clients.map(client => client.send(message))
+      );
+    } else {
+      this.forEach((set, client) => client.send(message));
     }
   }
 
@@ -48,9 +110,19 @@ class ClientCollection {
       throw new Error('Not array collection, the broadcast method is invalid.');
     }
 
-    this.collection[set].map(client => {
-      client.send(message);
-    });
+    if (set !== '*') {
+      if (Array.isArray(set)) {
+        set.map(s => this._broadcast(message, s));
+      } else {
+        this._broadcast(message, set);
+      }
+    } else {
+      this._broadcastToAll(message);
+    }
+  }
+
+  _send(message, set) {
+    this.collection[set].send(message);
   }
 
   send(message, set) {
@@ -60,7 +132,11 @@ class ClientCollection {
       );
     }
 
-    this.collection[set].send(message);
+    if (Array.isArray(set)) {
+      set.map(s => this._send(message, s));
+    } else {
+      this._send(message, set);
+    }
   }
 }
 
