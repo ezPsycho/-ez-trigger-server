@@ -41,14 +41,14 @@ class ClientCollection {
   }
 
   map(fn) {
-    return Object.entries(this.collection).map((set, client) => {
-      return fn(set, client);
+    return Object.entries(this.collection).map(([set, client], index) => {
+      return fn(set, client, index);
     });
   }
 
   forEach(fn) {
-    return Object.entries(this.collection).forEach((set, client) => {
-      return fn(set, client);
+    return Object.entries(this.collection).forEach(([set, client], index) => {
+      return fn(set, client, index);
     });
   }
 
