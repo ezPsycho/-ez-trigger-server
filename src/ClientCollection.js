@@ -27,7 +27,7 @@ class ClientCollection {
       const set = arguments[1];
 
       if (this.collection[set] && this.collection[set].includes(client)) {
-        const index = client.indexOf(client);
+        const index = this.collection[set].indexOf(client);
 
         this.collection[set].splice(index, 1);
       }
