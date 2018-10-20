@@ -30,7 +30,7 @@ class Program {
       this.localRecords[id] = {
         id,
         name,
-        record: localRecord;
+        record: localRecord
       };
 
       localRecord.on('record-updated', () => {
