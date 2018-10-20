@@ -75,7 +75,9 @@ class ClientCollection {
   }
 
   hasSet(name) {
-    return Object.keys(this.collection).includes(name);
+    return this.collection.hasOwnProperty(name);
+    //return name in this.collection;
+    //return Object.keys(this.collection).includes(name);
   }
 
   getNames() {
