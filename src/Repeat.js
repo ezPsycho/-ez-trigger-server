@@ -25,7 +25,7 @@ class Repeat {
           this.count++;
 
           if (!isNull(this.times) && this.count <= this.times) {
-            await this.fn(this.timer);
+            await this.fn(this.timer, this.count);
           } else {
             this.timer.clearInterval();
             resolve();
