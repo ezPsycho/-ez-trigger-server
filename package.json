@@ -1,6 +1,6 @@
 {
   "name": "@ez-trigger/server",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "src/shell.js",
   "module": "src/index.js",
   "author": "Losses Don",
